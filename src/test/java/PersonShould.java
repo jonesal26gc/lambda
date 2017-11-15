@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PersonShould {
 
@@ -72,12 +73,16 @@ public class PersonShould {
 
         listPeopleUsingPersonChecker(personList, new PersonChecker() {
             public boolean test(Person person) {
-                if (person.getName().toUpperCase().contains("TONY")) {
-                    return true;
-                }
-                return false;
+                return person.getName().toUpperCase().contains("TONY");
             }
         });
+
+        listPeopleUsingPersonChecker(personList,
+                                             (Person person) -> person.retrieveAge() == 20
+        );
+
+        listPeopleUsingPredicate(personList,
+                                 p -> p.getBirthday().getDayOfMonth()==22);
 
     }
 
@@ -133,6 +138,15 @@ public class PersonShould {
         System.out.println("with parameterised condition");
         for (Person person : personList) {
             if (personChecker.test(person)) {
+                System.out.println(person.toString());
+            }
+        }
+    }
+
+    private void listPeopleUsingPredicate(List<Person> personList, Predicate<Person> personPredicate) {
+        System.out.println("with parameterised condition");
+        for (Person person : personList) {
+            if (personPredicate.test(person)) {
                 System.out.println(person.toString());
             }
         }
